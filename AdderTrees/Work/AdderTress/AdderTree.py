@@ -126,7 +126,7 @@ def StructureTree(n,restricitons,type):
 
 
 def BuildTree():
-    Tree = StructureTree(16,0,5);
+    Tree = StructureTree(16,0,1);
     for i in range (0,len(Tree)):
         print(Tree[i]);
         print('\n');

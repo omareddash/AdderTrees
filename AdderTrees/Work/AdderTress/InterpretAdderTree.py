@@ -281,11 +281,11 @@ def SimulateAdderFilter(n,adder,filter):
 
 for count in range(1,7):
     if (count ==1):
-        TreeLength = 7
-    elif (count ==2 or 6):
+        TreeLength = 8
+    elif (count ==2) or (count == 6):
+        TreeLength = 6
+    elif (count == 3) or (count == 4) or (count== 5):
         TreeLength = 5
-    elif (count == 3 or 4 or 5):
-        TreeLength = 4
 
     AdderArray = [[[0] * 16 for i in range(TreeLength)]for k in range(7)];
     for filter in range (1,7):
@@ -299,7 +299,7 @@ for count in range(1,7):
     #plt.xticks(fontsize=5)
     #plt.yticks(fontsize=5)
     #plt.tight_layout()
-
+    #fil = 1
     for a1 in range (1,len(AdderArray[0])):
         for a2 in range (0,len(AdderArray[0][0])):
             #print(a1)
@@ -311,6 +311,7 @@ for count in range(1,7):
                    data[filter] = 0
                else:
                    data[filter] = datatemp[filter][0]
+            #data
             ax[a1-1][a2].bar([0.8*f for f in range(0,6)],data)
             ax[a1-1][a2].set_ylim([0,15000])
                 #ax = fig.add_subplot(len(ArrayAdd), len(ArrayAdd[0]), a1*a2)
