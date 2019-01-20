@@ -58,6 +58,7 @@ def InterpretAdderTree(AdderTree,n,Depth,p,g):
 def SimulateAdder(n):
         from  AdderTree import StructureTree;
         Tree = StructureTree(n,0,1);
+
         pgsstats = [[0] * n for i in range(len(Tree)+1)]
         pngsstats = [[0] * n for i in range(len(Tree)+1)]
         for index1 in range(0,len(pngsstats)):
@@ -136,6 +137,23 @@ def SimulateAdder(n):
 def SimulateAdderFilter(n,adder,filter):
     from AdderTree import StructureTree;
     Tree = StructureTree(n, 0, adder);
+    # use function to get tree delay for each bit
+    # use function to get tree unit count
+    # use function to estimate power
+    TreeD = TreeDelay(Tree,5,1)
+    TreeS = TreeSize(Tree,5,1)
+    TreeP = TreePower(Tree,5,1)
+    TempP = [0 for x in range(len(Tree))]
+    for i in range (0,len(Tree)):
+        TempP[i] = math.fsum(TreeP[i])
+    TotalP = math.fsum(TempP)
+    print('Delay')
+    print(TreeD)
+    print('Power')
+    print(TreeP)
+    print(TotalP)
+    print('Size')
+    print(TreeS)
     from Filter_Image import LoadImageData;
     sobelx = [[1, 0, -1], [2, 0, -2], [1, 0, -1]]
     sobely = [[1, 2, 1], [0, 0, 0], [-1, -2, -1]]
@@ -253,7 +271,7 @@ def SimulateAdderFilter(n,adder,filter):
     #print('P and G stats')
     pngstatsArray = pngstatsArray/(62*62*27)
     #print(pngstatsArray)
-    Results = open(r"results6.txt", "a")
+    Results = open(r"results7.txt", "a")
     Results.write('#######################################')
     Results.write('\n\n')
 
@@ -275,9 +293,76 @@ def SimulateAdderFilter(n,adder,filter):
     for line in range(0,len(pngstatsArray)):
         Results.write(str(pngstatsArray[line]))
         Results.write('\n')
+
+    Results.write('Tree Delay \n')
+    Results.write(str(TreeD))
+    Results.write('\n\n')
+    Results.write('Tree Size' + str(TreeS))
+    Results.write('\n\n')
+    Results.write('Tree Power' + str(TotalP))
+    Results.write('\n\n')
+    Results.write(str(TreeP))
     return pngsstats;
 
+
+def TreeDelay(AdderTree,GateDelayUnit,WireDelayUnit):
+    GDU = GateDelayUnit
+    WDU = WireDelayUnit
+    n = len(AdderTree[0])
+    Depth = len(AdderTree)
+    TreeDelay = [x[:] for x in [[0] * n] * (Depth)]
+    for i in range(1,Depth):
+        for j in range(n):
+            if AdderTree[i-1][j] == 0:
+                #copy interpret adder tree loops in here
+                TreeDelay[i][j] = TreeDelay[i-1][j] + WDU
+            else:
+                IndexMaster = AdderTree[i-1][j][0];
+                IndexSlave = AdderTree[i-1][j][1];
+                TreeDelay[i][j] = [0, 0]
+                td0 = max(TreeDelay[i-1][IndexSlave], TreeDelay[i-1][IndexMaster]) + GDU + WDU;
+                TreeDelay[i][j]= td0;
+    return TreeDelay
+
+def TreeSize(AdderTree,GateDelayUnit,WireDelayUnit):
+    n = len(AdderTree[0])
+    Depth = len(AdderTree)
+    TreeSize = 0
+    for i in range(1,Depth):
+        for j in range(n):
+            if AdderTree[i][j] == 0:
+                TreeSize = TreeSize
+                #copy interpret adder tree loops in here
+                #Do nothing
+            else:
+                TreeSize= TreeSize + 1;
+    return TreeSize
+
+def TreePower(AdderTree,GateDelayUnit,WireDelayUnit):
+    GPU = GateDelayUnit
+    WPU = WireDelayUnit
+    n = len(AdderTree[0])
+    Depth = len(AdderTree)
+    TreePower = [x[:] for x in [[0] * n] * (Depth)]
+    for i in range(1,Depth):
+        for j in range(n):
+            if AdderTree[i-1][j] == 0:
+                #copy interpret adder tree loops in here
+                TreePower[i][j] = TreePower[i-1][j] + WPU
+            else:
+                IndexMaster = int(AdderTree[i-1][j][0]);
+                IndexSlave = int(AdderTree[i-1][j][1]);
+                TreePower[i][j] = [0, 0]
+                tp0 = GPU + WPU;
+                TreePower[i][j]= tp0;
+
+    #Power = sum(TreePower)
+    return  TreePower
 #ArrayAdd;
+
+
+
+
 
 for count in range(1,7):
     if (count ==1):
@@ -296,15 +381,16 @@ for count in range(1,7):
         #np.append(AdderArray,Adder)
     #Adder2 = np.array(Adder)
     fig, ax = plt.subplots(len(AdderArray[0]),len(AdderArray[0][0]))
-    plt.xticks(fontsize=5)
-    plt.yticks(fontsize=5)
-    plt.tight_layout()
+    #plt.xticks(fontsize=5)
+    #plt.yticks(fontsize=5)
+    #plt.tight_layout()
 
-    for a1 in range (0,len(AdderArray[0])):
+    for a1 in range (0,len(AdderArray[0])-1):
         for a2 in range (0,len(AdderArray[0][0])):
             datatemp = [AdderArray[x][a1][a2] for x in range(1,7)]
             data = [0 for var in range(len(datatemp))]
             for filter in range(1, 6):
+               #print(filter)
                if datatemp[filter]==0:
                    data[filter] = 0
                else:
@@ -320,3 +406,5 @@ for count in range(1,7):
     #fig.show()
 plt.show()
 plt.savefig("test1.png",bbox_inches='tight')
+
+
