@@ -4,8 +4,7 @@
 import math;
 import numpy as np;
 import matplotlib.pyplot as plt
-import csv;
-#import seaborn as sns;
+
 from numpy import zeros
 
 def InterpretAdderTree(AdderTree,n,Depth,p,g):
@@ -187,7 +186,7 @@ def SimulateAdderFilter(n,adder,filter):
     for index1 in range(0, len(pngsstats)):
         for index2 in range(0, len(pngsstats[index1])):
             pngsstats[index1][index2] = [0, 0]
-    psgs = [[0] * 3 for i in range(n)]
+
     xrand = np.random.normal(128, 10, 2 ** n)
     yrand = np.random.normal(128, 10, 2 ** n)
     xx2_grid = [(x, x2) for x in range(0,len(addarray)) for x2 in range(0,len(addarray[0]))]
@@ -219,7 +218,6 @@ def SimulateAdderFilter(n,adder,filter):
             # B = ybin[0:];
             p = []
             g = []
-
             for i in range(0, n):
                 p.append(0)
                 g.append(0)
@@ -232,14 +230,10 @@ def SimulateAdderFilter(n,adder,filter):
                 # print(B)
                 p[i] = A[i] or B[i];
                 g[i] = A[i] and B[i];
-                if p[i] == 1:
-                    psgs[i][0] = psgs[i][0]+1
-                if g[i] == 1:
-                    psgs[i][1]= psgs[i][1] + 1
-                psgs[i][2] +=  1
+
                 ## Test Vectors
-                #p = [1,1,0,0,0,1,1,1,0,1,0,0,0,0,1,1]
-                #g = [0,0,1,0,0,0,0,0,0,0,1,1,0,0,0,0]
+                p = [1,1,0,0,0,1,1,1,0,1,0,0,0,0,1,1]
+                g = [0,1,1,0,0,0,1,0,0,1,1,1,0,0,0,0]
                 ###
             # print ('p =')
             # print (p);
@@ -315,7 +309,7 @@ def SimulateAdderFilter(n,adder,filter):
     Results.write('Tree Power' + str(TotalP))
     Results.write('\n\n')
     Results.write(str(TreeP))
-    return pngsstats,psgs;
+    return pngsstats;
 
 
 def TreeDelay(AdderTree,GateDelayUnit,WireDelayUnit):
@@ -386,33 +380,13 @@ for count in range(1,7):
         TreeLength = 4
 
     AdderArray = [[[0] * 16 for i in range(TreeLength+1)]for k in range(7)];
-    PSGS = [[[0] * 3 for i in range(16)] for k in range(7)];
     for filter in range (1,7):
-        Adder, psgs = SimulateAdderFilter(16,count,filter);
+        Adder = SimulateAdderFilter(16,count,filter);
         #size = Adder.shape;
         #ArrayAdd[count, filter,size[0],size[1],size[2]] = Adder[filter]
         AdderArray[filter] = Adder
-        PSGS[filter] = psgs
         #np.append(AdderArray,Adder)
     #Adder2 = np.array(Adder)
- #   sns.distplot(PSGS[:][:][0])
-    PSGSnom = np.array(PSGS)
-    #PSGSnom = PSGSnom/max(max(max(PSGS)))
-    PSGSnom = PSGSnom / 96100
-    PsNGs = open(r"psgs.txt", "a")
-
-    resultFile = open("PSGS.csv", 'wb')
-    wr = csv.writer(resultFile, dialect='excel')
-
-    figpg = plt.hist(PSGSnom[:][:][0])
-    plt.show()
-    for ppgg in range(len(PSGS)):
-        PsNGs.write(str(PSGSnom[ppgg]))
-        PsNGs.write('\n')
-        PsNGs.write('#################')
-        PsNGs.write('\n')
-#        wr.writerows(str(PSGS[ppgg])+"\n")
-    
     fig, ax = plt.subplots(len(AdderArray[0]),len(AdderArray[0][0]))
     #plt.xticks(fontsize=5)
     #plt.yticks(fontsize=5)

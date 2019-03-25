@@ -1,0 +1,64 @@
+module prefixadder( 
+input  [7 : 0] A,
+input  [7 : 0] B, 
+output  [7 : 0] Sum, 
+output  Cout, 
+output  [7 : 0] Cg); 
+wire [7 : 0] p; 
+wire [7 : 0] g; 
+assign p[0] = A[0] ^ B[0]; 
+assign g[0] = A[0] & B[0]; 
+assign p[1] = A[1] ^ B[1]; 
+assign g[1] = A[1] & B[1]; 
+assign p[2] = A[2] ^ B[2]; 
+assign g[2] = A[2] & B[2]; 
+assign p[3] = A[3] ^ B[3]; 
+assign g[3] = A[3] & B[3]; 
+assign p[4] = A[4] ^ B[4]; 
+assign g[4] = A[4] & B[4]; 
+assign p[5] = A[5] ^ B[5]; 
+assign g[5] = A[5] & B[5]; 
+assign p[6] = A[6] ^ B[6]; 
+assign g[6] = A[6] & B[6]; 
+assign p[7] = A[7] ^ B[7]; 
+assign g[7] = A[7] & B[7]; 
+wire cp0[0],cg0[0];
+wire cp0[1],cg0[1];
+wire cp0[2],cg0[2];
+wire cp0[3],cg0[3];
+wire cp0[4],cg0[4];
+wire cp0[5],cg0[5];
+wire cp0[6],cg0[6];
+wire cp0[7],cg0[7];
+wire cp1[0],cg1[0];
+wire cp1[1],cg1[1];
+wire cp1[2],cg1[2];
+wire cp1[3],cg1[3];
+wire cp1[4],cg1[4];
+wire cp1[5],cg1[5];
+wire cp1[6],cg1[6];
+wire cp1[7],cg1[7];
+wire cp2[0],cg2[0];
+wire cp2[1],cg2[1];
+wire cp2[2],cg2[2];
+wire cp2[3],cg2[3];
+wire cp2[4],cg2[4];
+wire cp2[5],cg2[5];
+wire cp2[6],cg2[6];
+wire cp2[7],cg2[7];
+wire cp3[0],cg3[0];
+wire cp3[1],cg3[1];
+wire cp3[2],cg3[2];
+wire cp3[3],cg3[3];
+wire cp3[4],cg3[4];
+wire cp3[5],cg3[5];
+wire cp3[6],cg3[6];
+wire cp3[7],cg3[7];
+wire cp4[0],cg4[0];
+wire cp4[1],cg4[1];
+wire cp4[2],cg4[2];
+wire cp4[3],cg4[3];
+wire cp4[4],cg4[4];
+wire cp4[5],cg4[5];
+wire cp4[6],cg4[6];
+wire cp4[7],cg4[7];
